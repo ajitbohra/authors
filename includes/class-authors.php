@@ -68,6 +68,7 @@ final class Authors {
 		// Set up init Hook.
 		add_action( 'admin_enqueue_scripts', array( $this, 'register_assets' ) );
 		add_action( 'init', array( $this, 'register_posttype'));
+		add_action( 'save_post', array($this,'save_meta'), 10, 2 );
 	}
 
 	/**
@@ -177,5 +178,40 @@ final class Authors {
 	 */
 	public function render_metabox($post){
 		require_once 'views/meta-fields.php';
+	}
+
+	/**
+	 * Save custom meta
+	 *
+	 * @return void
+	 */
+	public function save_meta($post_id, $post) {
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			return;
+		}
+
+		if( 'authors' !== $post->post_type) {
+			return;
+		}
+
+		$fields = array(
+			'first_name',
+			'last_name',
+			'biography',
+			'facebook_url',
+			'linkedin_url',
+		);
+
+		foreach ($fields as $field) {
+			if( isset( $_POST[ $field ] ) ) {
+				update_post_meta( $post_id, $field, sanitize_text_field( $_POST[ $field ] ) );
+			} else {
+				delete_post_meta( $post_id, $field );
+			}
+		}
 	}
 }
