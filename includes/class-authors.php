@@ -176,6 +176,6 @@ final class Authors {
 	 * @return void
 	 */
 	public function render_metabox($post){
-		echo 'Authors Metabox';
+		require_once 'views/meta-fields.php';
 	}
 }
