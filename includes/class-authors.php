@@ -135,6 +135,7 @@ final class Authors {
 			'labels'                => $labels,
 			'supports'              => array('title'),
 			'taxonomies'            => array(),
+			'register_meta_box_cb'  => array($this, 'register_metabox'),
 			'hierarchical'          => false,
 			'public'                => true,
 			'show_ui'               => true,
@@ -151,5 +152,30 @@ final class Authors {
 			'show_in_rest'          => false,
 		);
 		register_post_type( 'authors', $args );
+	}
+
+	/**
+	 * Custom metabox
+	 *
+	 * @return void
+	 */
+	public function register_metabox(){
+		add_meta_box(
+			'aba_metabox',
+			'Details',
+			array($this, 'render_metabox'),
+			'authors',
+			'normal',
+			'default'
+		);
+	}
+
+	/**
+	 * Render metabox content
+	 *
+	 * @return void
+	 */
+	public function render_metabox($post){
+		echo 'Authors Metabox';
 	}
 }
