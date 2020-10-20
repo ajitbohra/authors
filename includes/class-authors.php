@@ -76,6 +76,10 @@ final class Authors {
 	 * Register Scripts.
 	 */
 	public function register_assets() {
+		// Enable media assets.
+		wp_enqueue_media();
+
+		// Scripts
 		wp_register_script(
 			'aba-script',
 			ABA_PLUGIN_URL . 'assets/admin.js',
@@ -206,6 +210,7 @@ final class Authors {
 			'facebook_url',
 			'linkedin_url',
 			'user_id',
+			'image_id',
 		);
 
 		foreach ($fields as $field) {
