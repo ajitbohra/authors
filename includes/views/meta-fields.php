@@ -35,5 +35,20 @@
 			<th><label for="linkedin_url">Linkedin URL</label></th>
 			<td><input type="url" id="linkedin_url" name="linkedin_url" value="<?php echo esc_attr( $post->linkedin_url ) ?>" class="regular-text"></td>
 		</tr>
+		<tr>
+			<th><label for="user_id">User</label></th>
+			<td>
+				<?php
+					$user_args = array(
+						'id'               => 'user_id',
+						'name'             => 'user_id',
+						'show_option_all'  => 'select user',
+						'selected'         => $post->user_id,
+						'include_selected' => true,
+					);
+					wp_dropdown_users($user_args);
+				?>
+			</td>
+		</tr>
 	</tbody>
 </table>

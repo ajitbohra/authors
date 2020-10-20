@@ -204,6 +204,7 @@ final class Authors {
 			'biography',
 			'facebook_url',
 			'linkedin_url',
+			'user_id',
 		);
 
 		foreach ($fields as $field) {
