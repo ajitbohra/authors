@@ -69,6 +69,7 @@ final class Authors {
 		add_action( 'admin_enqueue_scripts', array( $this, 'register_assets' ) );
 		add_action( 'init', array( $this, 'register_posttype'));
 		add_action( 'save_post', array($this,'save_meta'), 10, 2 );
+		add_filter( 'wp_insert_post_data' , array($this,'save_title') , '99', 2 );
 	}
 
 	/**
@@ -134,7 +135,7 @@ final class Authors {
 			'label'                 => __( 'authors', 'aba' ),
 			'description'           => __( 'Author Profiles', 'aba' ),
 			'labels'                => $labels,
-			'supports'              => array('title'),
+			'supports'              => array(''),
 			'taxonomies'            => array(),
 			'register_meta_box_cb'  => array($this, 'register_metabox'),
 			'hierarchical'          => false,
@@ -214,5 +215,29 @@ final class Authors {
 				delete_post_meta( $post_id, $field );
 			}
 		}
+	}
+
+	/**
+	 * Save author title
+	 *
+	 * @param array $data
+	 * @param array $postarr
+	 * @return void
+	 */
+	public function save_title($data , $postarr){
+		if( 'authors' !== $data[ 'post_type' ]) {
+			return;
+		}
+
+		$first_name = ( ! empty( $_POST[ 'first_name' ] ) ) ? $_POST[ 'first_name' ] : get_post_meta( $postarr[ 'ID' ], 'first_name', true );
+		$last_name = ( ! empty( $_POST[ 'last_name' ] ) ) ? $_POST[ 'last_name' ] : get_post_meta( $postarr[ 'ID' ], 'last_name', true );
+		$author_name = "{$first_name} {$last_name}";
+
+		if( $author_name !== '' ) {
+			$data[ 'post_title' ] = $author_name;
+			$data[ 'post_name' ]  = sanitize_title( sanitize_title_with_dashes( $author_name, '', 'save' ) );
+		}
+
+		return $data;
 	}
 }
