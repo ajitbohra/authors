@@ -74,6 +74,7 @@ final class Authors
 		add_action('admin_enqueue_scripts', array($this, 'register_admin_assets'));
 		add_action('wp_enqueue_scripts', array($this, 'register_assets'));
 		add_action('init', array($this, 'register_posttype'));
+		add_filter('post_updated_messages', array($this, 'updated_messages'), 10, 1);
 		add_action('save_post', array($this, 'save_meta'), 10, 2);
 		add_filter('wp_insert_post_data', array($this, 'save_title'), '99', 2);
 		add_filter('single_template', array($this, 'get_single_template'));
@@ -206,6 +207,48 @@ final class Authors
 		register_post_type('authors', $args);
 	}
 
+	public function updated_messages($messages)
+	{
+		$post             = get_post();
+		$post_type        = get_post_type($post);
+		$post_type_object = get_post_type_object($post_type);
+
+		$messages['authors'] = array(
+			0  => '', // Unused. Messages start at index 1.
+			1  => __('Author updated.', 'aba'),
+			2  => __('Custom field updated.', 'aba'),
+			3  => __('Custom field deleted.', 'aba'),
+			4  => __('Author updated.', 'aba'),
+			/* translators: %s: date and time of the revision */
+			5  => isset($_GET['revision']) ? sprintf(__('Author restored to revision from %s', 'aba'), wp_post_revision_title((int) $_GET['revision'], false)) : false,
+			6  => __('Author published.', 'aba'),
+			7  => __('Author saved.', 'aba'),
+			8  => __('Author submitted.', 'aba'),
+			9  => sprintf(
+				__('Author scheduled for: <strong>%1$s</strong>.', 'aba'),
+				// translators: Publish box date format, see http://php.net/date
+				date_i18n(__('M j, Y @ G:i', 'aba'), strtotime($post->post_date))
+			),
+			10 => __('Author draft updated.', 'aba'),
+		);
+
+		if ($post_type_object->publicly_queryable) {
+			$permalink = get_permalink($post->ID);
+
+			$view_link = sprintf('&nbsp;<a href="%s">%s</a>', esc_url($permalink), __('View author', 'aba'));
+			$messages['authors'][1] .= $view_link;
+			$messages['authors'][6] .= $view_link;
+			$messages['authors'][9] .= $view_link;
+
+			$preview_permalink = add_query_arg('preview', 'true', $permalink);
+			$preview_link      = sprintf('<a target="_blank" href="%s">%s</a>', esc_url($preview_permalink), __('Preview author', 'aba'));
+			$messages[$post_type][8] .= $preview_link;
+			$messages[$post_type][10] .= $preview_link;
+		}
+
+		return $messages;
+	}
+
 	/**
 	 * Custom metabox
 	 *
@@ -306,9 +349,9 @@ final class Authors
 	public function get_single_template($single_template)
 	{
 		if ('authors' === get_post_type()) {
-			$single_template = locate_template( "single-authors.php" );
+			$single_template = locate_template("single-authors.php");
 
-			if ( !file_exists( $single_template ) ) {
+			if (!file_exists($single_template)) {
 				$single_template = ABA_PLUGIN_DIR . '/templates/single-authors.php';
 			}
 		}
