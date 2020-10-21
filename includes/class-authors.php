@@ -305,10 +305,12 @@ final class Authors
 	 */
 	public function get_single_template($single_template)
 	{
-		global $post;
-
 		if ('authors' === get_post_type()) {
-			$single_template = ABA_PLUGIN_DIR . '/templates/single-authors.php';
+			$single_template = locate_template( "single-authors.php" );
+
+			if ( !file_exists( $single_template ) ) {
+				$single_template = ABA_PLUGIN_DIR . '/templates/single-authors.php';
+			}
 		}
 
 		return $single_template;
