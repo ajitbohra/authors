@@ -123,7 +123,7 @@ if ($post->user_id) {
 
 					<?php if ($author_posts) : ?>
 						<li id="author-posts">
-							<span>Post:</span>
+							<span>Posts:</span>
 							<ul>
 								<?php foreach ($author_posts as $author_post) : ?>
 									<li>

@@ -78,6 +78,7 @@ final class Authors
 		add_action('save_post', array($this, 'save_meta'), 10, 2);
 		add_filter('wp_insert_post_data', array($this, 'save_title'), '99', 2);
 		add_filter('single_template', array($this, 'get_single_template'));
+		add_filter('archive_template', array($this, 'get_archive_template'));
 	}
 
 	/**
@@ -357,5 +358,24 @@ final class Authors
 		}
 
 		return $single_template;
+	}
+
+	/**
+	 * Get authors archive template
+	 *
+	 * @param string $archive_template
+	 * @return string
+	 */
+	public function get_archive_template($archive_template)
+	{
+		if ('authors' === get_post_type()) {
+			$archive_template = locate_template("archive-authors.php");
+
+			if (!file_exists($archive_template)) {
+				$archive_template = ABA_PLUGIN_DIR . '/templates/archive-authors.php';
+			}
+		}
+
+		return $archive_template;
 	}
 }
