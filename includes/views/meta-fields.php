@@ -50,21 +50,57 @@
 				?>
 			</td>
 		</tr>
-		<tr>
+		<tr id="author-image-container">
 			<th>Image</th>
 			<td>
 				<?php
 				$image = wp_get_attachment_image_src($post->image_id, 'medium');
 				if ($image) :
 				?>
-					<a href="#" class="author-image button media-button"><img src="<?php echo $image[0]; ?>" /></a>
-					<a href="#" class="author-image-remove submitdelete">Remove image</a>
+					<a href="#" class="author-image"><img src="<?php echo $image[0]; ?>" /></a>
+					<a href="#" class="author-image-remove">Remove</a>
 					<input type="hidden" id="image_id" name="image_id" value="<?php echo $post->image_id ?>">
 				<?php else : ?>
 					<a class="author-image button media-button">Upload</a>
-					<a href="#" class="author-image-remove submitdelete" style="display: none">Remove image</a>
+					<a href="#" class="author-image-remove" style="display: none">Remove</a>
 					<input type="hidden" id="image_id" name="image_id" value="">
 				<?php endif; ?>
+			</td>
+		</tr>
+		<tr>
+			<th>Gallery</th>
+			<td id="author-gallery-container">
+				<ul class="author-gallery">
+					<?php
+					$gallery_image_ids = explode(',', $post->gallery_image_ids);
+					$gallery_args = array(
+						'post_type' => 'attachment',
+						'orderby' => 'post__in',
+						'order' => 'ASC',
+						'post__in' => $gallery_image_ids,
+						'numberposts' => -1,
+						'post_mime_type' => 'image'
+					);
+					$images = get_posts($gallery_args);
+
+					if ($images) :
+						foreach ($images as $image) :
+							$image_src = wp_get_attachment_image_src($image->ID, 'thumbnail');
+
+					?>
+
+							<li>
+								<img src="<?php echo $image_src[0] ?>" />
+								<a href="#" data-id="<?php echo $image->ID; ?>" class="author-gallery-remove">Remove</a>
+							</li>
+
+					<?php
+						endforeach;
+					endif; ?>
+
+				</ul>
+				<input type="hidden" id="gallery_image_ids" name="gallery_image_ids" value="<?php echo esc_attr($post->gallery_image_ids); ?>">
+				<a class="author-gallery-add button media-button">Add Images</a>
 			</td>
 		</tr>
 	</tbody>

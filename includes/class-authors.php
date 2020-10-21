@@ -77,7 +77,9 @@ final class Authors {
 	 */
 	public function register_assets() {
 		// Enable media assets.
-		wp_enqueue_media();
+		if ( ! did_action( 'wp_enqueue_media' ) ) {
+			wp_enqueue_media();
+		}
 
 		// Scripts
 		wp_register_script(
@@ -211,6 +213,7 @@ final class Authors {
 			'linkedin_url',
 			'user_id',
 			'image_id',
+			'gallery_image_ids',
 		);
 
 		foreach ($fields as $field) {
