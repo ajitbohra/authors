@@ -66,3 +66,10 @@ function aba() {
 }
 
 aba();
+
+// Plugin activation.
+function aba_activation() {
+	aba()->register_posttype();
+    flush_rewrite_rules();
+}
+register_activation_hook( __FILE__, 'aba_activation' );
