@@ -11,7 +11,8 @@
  * @package   aba
  */
 
-wp_nonce_field( 'aba_authors_meta', '_aba_nonce' );
+wp_nonce_field( 'aba_author_title', '_aba_title_nonce' );
+wp_nonce_field( 'aba_author_meta', '_aba_meta_nonce' );
 ?>
 <table class="form-table">
 	<tbody>

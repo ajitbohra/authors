@@ -294,7 +294,7 @@ final class Authors {
 		}
 
 		// nonce check.
-		if ( ! isset( $_POST['_aba_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_aba_nonce'] ) ), 'aba_authors_meta' ) ) {
+		if ( ! isset( $_POST['_aba_meta_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_aba_meta_nonce'] ) ), 'aba_author_meta' ) ) {
 			return;
 		}
 
@@ -331,8 +331,8 @@ final class Authors {
 		}
 
 		// nonce check.
-		if ( ! isset( $_POST['_aba_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_aba_nonce'] ) ), 'aba_authors_meta' ) ) {
-			return;
+		if ( ! isset( $_POST['_aba_title_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_aba_title_nonce'] ) ), 'aba_author_title' ) ) {
+			return $data;
 		}
 
 		$first_name  = ( ! empty( $_POST['first_name'] ) ) ? sanitize_text_field( wp_unslash( $_POST['first_name'] ) ) : get_post_meta( $postarr['ID'], 'first_name', true );
