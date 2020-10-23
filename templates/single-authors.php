@@ -11,6 +11,8 @@
  * @package   aba
  */
 
+/** @var \WP_Post $post */
+
 get_header();
 
 $image = wp_get_attachment_image_src( $post->image_id, 'medium' );

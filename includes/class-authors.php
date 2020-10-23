@@ -22,7 +22,7 @@ final class Authors {
 	 *
 	 * @since
 	 *
-	 * @var Aba
+	 * @var Authors
 	 */
 	private static $instance;
 
@@ -47,7 +47,7 @@ final class Authors {
 	 *
 	 * @since
 	 *
-	 * @return Aba
+	 * @return Authors
 	 */
 	public static function get_instance() {
 		if ( null === static::$instance ) {
@@ -69,7 +69,7 @@ final class Authors {
 		add_action( 'init', array( $this, 'register_posttype' ) );
 		add_filter( 'post_updated_messages', array( $this, 'updated_messages' ), 10, 1 );
 		add_action( 'save_post', array( $this, 'save_meta' ), 10, 2 );
-		add_filter( 'wp_insert_post_data', array( $this, 'save_title' ), '99', 2 );
+		add_filter( 'wp_insert_post_data', array( $this, 'save_title' ), 99, 2 );
 		add_filter( 'single_template', array( $this, 'get_single_template' ) );
 		add_filter( 'archive_template', array( $this, 'get_archive_template' ) );
 	}
@@ -113,7 +113,7 @@ final class Authors {
 		wp_register_style(
 			'aba',
 			ABA_PLUGIN_URL . 'assets/admin.css',
-			null,
+			array(),
 			filemtime( ABA_PLUGIN_DIR . 'assets/admin.css' )
 		);
 		wp_enqueue_style( 'aba' );
@@ -133,7 +133,7 @@ final class Authors {
 		wp_register_style(
 			'aba',
 			ABA_PLUGIN_URL . 'assets/style.css',
-			null,
+			array(),
 			filemtime( ABA_PLUGIN_DIR . 'assets/style.css' )
 		);
 		wp_enqueue_style( 'aba' );
@@ -266,7 +266,7 @@ final class Authors {
 	/**
 	 * Render metabox content
 	 *
-	 * @param WP_Post $post current post.
+	 * @param \WP_Post $post current post.
 	 * @return void
 	 */
 	public function render_metabox( $post ) {
@@ -276,8 +276,8 @@ final class Authors {
 	/**
 	 * Save custom meta
 	 *
-	 * @param int     $post_id post id.
-	 * @param WP_Post $post post objet.
+	 * @param int      $post_id post id.
+	 * @param \WP_Post $post post objet.
 	 * @return void
 	 */
 	public function save_meta( $post_id, $post ) {
@@ -323,11 +323,11 @@ final class Authors {
 	 *
 	 * @param array $data post data.
 	 * @param array $postarr post attr.
-	 * @return void
+	 * @return array
 	 */
 	public function save_title( $data, $postarr ) {
 		if ( 'authors' !== $data['post_type'] ) {
-			return;
+			return [];
 		}
 
 		// nonce check.
@@ -339,7 +339,7 @@ final class Authors {
 		$last_name   = ( ! empty( $_POST['last_name'] ) ) ? sanitize_text_field( wp_unslash( $_POST['last_name'] ) ) : get_post_meta( $postarr['ID'], 'last_name', true );
 		$author_name = "{$first_name} {$last_name}";
 
-		if ( '' !== $author_name ) {
+		if ( ' ' !== $author_name ) {
 			$data['post_title'] = $author_name;
 			$data['post_name']  = sanitize_title( sanitize_title_with_dashes( $author_name, '', 'save' ) );
 		}
