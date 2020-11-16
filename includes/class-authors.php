@@ -339,7 +339,7 @@ final class Authors {
 		$last_name   = ( ! empty( $_POST['last_name'] ) ) ? sanitize_text_field( wp_unslash( $_POST['last_name'] ) ) : get_post_meta( $postarr['ID'], 'last_name', true );
 		$author_name = "{$first_name} {$last_name}";
 
-		if ( ' ' !== $author_name ) {
+		if ( ! empty( trim( $author_name ) ) ) {
 			$data['post_title'] = $author_name;
 			$data['post_name']  = sanitize_title( sanitize_title_with_dashes( $author_name, '', 'save' ) );
 		}
