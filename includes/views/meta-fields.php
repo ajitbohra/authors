@@ -11,6 +11,8 @@
  * @package   aba
  */
 
+/** @var \WP_Post $post */
+
 wp_nonce_field( 'aba_author_title', '_aba_title_nonce' );
 wp_nonce_field( 'aba_author_meta', '_aba_meta_nonce' );
 ?>
@@ -92,7 +94,7 @@ wp_nonce_field( 'aba_author_meta', '_aba_meta_nonce' );
 
 							<li>
 								<img src="<?php echo esc_attr( $image_src[0] ); ?>" />
-								<a href="#" data-id="<?php echo esc_attr( $image->ID ); ?>" class="author-gallery-remove">Remove</a>
+								<a href="#" data-id="<?php echo $image->ID; ?>" class="author-gallery-remove">Remove</a>
 							</li>
 
 							<?php

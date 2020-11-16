@@ -59,7 +59,7 @@ use LubusIN\Aba\Authors;
  * Returns the main instance of Aba to prevent the need to use globals.
  *
  * @since  0.1.0
- * @return Aba
+ * @return \LubusIN\Aba\Authors
  */
 function aba() {
 	return Authors::get_instance();

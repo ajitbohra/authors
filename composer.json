@@ -8,28 +8,29 @@
     "composer/installers": "~1.2"
   },
   "require-dev": {
-		"dealerdirect/phpcodesniffer-composer-installer": "*",
+    "dealerdirect/phpcodesniffer-composer-installer": "*",
     "squizlabs/php_codesniffer": "*",
     "wp-coding-standards/wpcs": "*",
-    "phpcompatibility/phpcompatibility-wp": "*"
+    "phpcompatibility/phpcompatibility-wp": "*",
+    "szepeviktor/phpstan-wordpress": "^0.6.6"
   },
   "keywords": [
     "wordpress",
     "plugin",
-		"authors",
-		"profiles"
+    "authors",
+    "profiles"
   ],
   "support": {
     "issues": "https://github.com/lubusIN/authors/"
-	},
-	"autoload": {
-		"classmap": [
-			"includes/"
-		],
-		"files": [
-			"includes/functions.php"
-		]
-	},
+  },
+  "autoload": {
+    "classmap": [
+      "includes/"
+    ],
+    "files": [
+      "includes/functions.php"
+    ]
+  },
   "scripts": {
     "phpcs": [
       "phpcs -s -p ."
@@ -42,6 +43,6 @@
     "scripts-description": {
       "phpcs": "Analyze code against the WordPress coding standards with PHP_CodeSniffer",
       "phpcbf": "Fix coding standards warnings/errors automatically with PHP Code Beautifier"
-		}
+    }
   }
 }
